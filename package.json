@@ -1,18 +1,26 @@
 {
   "name": "nodejs-skeleton",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "private": true,
+  "description": "Nodejs project skeleton.",
+  "author": "Xun.Fu <791152837@qq.com>",
+  "main": "bin/www",
   "scripts": {
-    "start": "node ./bin/www"
+    "start": "node ./bin/www",
+    "serve": "nodemon -i public/",
+    "watch": "node ./tools/watch",
+    "eslint": "eslint -c .eslintrc.json --cache ./public/**/*.js ./routes ./services",
+    "stylelint": "stylelint ./public/**/*.css",
+    "lint": "npm run eslint && npm run stylelint",
+    "prepush": "npm run lint"
   },
   "dependencies": {
-    "body-parser": "~1.15.2",
-    "cookie-parser": "~1.4.3",
-    "debug": "~2.2.0",
-    "ejs": "~2.5.2",
-    "express": "~4.14.0",
-    "morgan": "~1.7.0",
-    "node-sass-middleware": "0.9.8",
-    "serve-favicon": "~2.3.0"
+    "body-parser": "1.17.2",
+    "cookie-parser": "1.4.3",
+    "debug": "3.0.1",
+    "ejs": "2.5.7",
+    "express": "4.15.4",
+    "morgan": "1.8.2",
+    "serve-favicon": "2.4.3"
   }
 }
