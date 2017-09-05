@@ -12,8 +12,7 @@ const joinBaseRoot = file => path.join(baseRoot, file);
 
 const webpackConfig = {
   entry: {
-    'holiday-index': joinBaseRoot('public/holiday/javascripts/index.js'),
-
+    holiday_index: joinBaseRoot('public/holiday/javascripts/index.js'),
     error: joinBaseRoot('public/javascripts/error.js')
   },
   output: {
@@ -23,37 +22,30 @@ const webpackConfig = {
     chunkFilename: '[id].js'
   },
   module: {
-    loaders: [
-      {
-        test: /\.s?css$/,
-        loader: ExtractTextPlugin.extract('style', 'css!sass!postcss')
-      },
-      {
-        test: /\.(png|svg|gif|jpe?g|icon?|eot|ttf|woff2?)$/,
-        loader: 'url?limit=13312&name=[name]-[hash].[ext]'
-      },
-      {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: /node_modules/
-      },
-      {
-        test: /\.jsx$/,
-        loader: 'babel',
-        exclude: /node_modules/,
-        query: {
-          presets: ['react', 'stage-0', 'es2015']
-        }
-      },
-      {
-        test: /\.handlebars$/,
-        loader: 'handlebars-loader'
-      },
-      {
-        test: /\.vue$/,
-        loader: 'vue'
+    loaders: [{
+      test: /\.s?css$/,
+      loader: ExtractTextPlugin.extract('style', 'css!sass!postcss')
+    }, {
+      test: /\.(png|svg|gif|jpe?g|icon?|eot|ttf|woff2?)$/,
+      loader: 'url?limit=13312&name=[name]-[hash].[ext]'
+    }, {
+      test: /\.js$/,
+      loader: 'eslint-loader',
+      exclude: /node_modules/
+    }, {
+      test: /\.jsx$/,
+      loader: 'babel',
+      exclude: /node_modules/,
+      query: {
+        presets: ['react', 'stage-0', 'es2015']
       }
-    ]
+    }, {
+      test: /\.handlebars$/,
+      loader: 'handlebars-loader'
+    }, {
+      test: /\.vue$/,
+      loader: 'vue'
+    }]
   },
   postcss: [
     stylelint(),

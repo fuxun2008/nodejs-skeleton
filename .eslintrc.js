@@ -50,6 +50,7 @@ module.exports = {
     'no-return-assign': 2,
     'no-use-before-define': 0,
     'no-plusplus': 0,
+    'import/no-extraneous-dependencies': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }

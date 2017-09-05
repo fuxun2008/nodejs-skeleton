@@ -21,9 +21,6 @@ const redisPublic = {
   pass: 'AVPVs82aSq10PpFW0qgS3KFIL0AiSDPB'
 };
 
-const redisConf = redisPublic;
-const codisConf = redisPublic;
-
 if (ENV === 'production' || ENV === 'release' || ENV === 'test') {
   env = ENV;
   publicPath = cdnPath;
@@ -40,9 +37,7 @@ if (ENV === 'production' || ENV === 'release' || ENV === 'test') {
 exports.cdnPath = cdnPath;
 exports.publicPath = publicPath;
 exports.baseRoot = baseRoot;
-exports.codisConf = codisConf;
 exports.toolsApi = toolsApi;
 exports.env = env;
 exports.wechat = wechat;
-exports.redisConf = redisConf;
-exports.codisConf = codisConf;
+exports.codisConf = redisPublic;
