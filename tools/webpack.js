@@ -31,7 +31,7 @@ const webpackConfig = {
     }, {
       test: /\.js$/,
       loader: 'eslint',
-      exclude: /node_modules/
+      exclude: [/node_modules/, /public\/assets/]
     }, {
       test: /\.jsx$/,
       loader: 'babel',
