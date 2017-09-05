@@ -39,7 +39,7 @@ const log = txt => console.log(`[${(new Date()).toLocaleString()}] ${txt}`);
 
 const now = new Date();
 const buildTime = `build: ${now.toLocaleString()}`;
-const banner = `/**\n * ${ART}\n * ${buildTime}\n */\n`;
+// const banner = `/**\n * ${ART}\n * ${buildTime}\n */\n`;
 
 const htmlOpts = {
   minifyCSS: true,
@@ -130,7 +130,7 @@ function processView(view) {
 function processCss(filename) {
   const fpath = path.join(ASSETS, `${filename}.css`);
   const css0 = fs.readFileSync(fpath, 'utf8');
-  const css1 = banner + csso.minify(css0, { debug: true });
+  const css1 = '' + csso.minify(css0, { debug: true });
   const publicName = `${filename}-${md5(css1)}.css`;
 
   fs.writeFileSync(path.join(ASSETS, publicName), css1);
@@ -148,7 +148,7 @@ function processScript(filename) {
     return processImages(match, file, type);
   });
 
-  const js2 = banner + uglify.minify(js1, { fromString: true }).code;
+  const js2 = '' + uglify.minify(js1, { fromString: true }).code;
   const publicName = `${filename}-${md5(js2)}.js`;
 
   fs.writeFileSync(path.join(ASSETS, publicName), js2);
