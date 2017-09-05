@@ -30,7 +30,7 @@ const webpackConfig = {
       loader: 'url?limit=13312&name=[name]-[hash].[ext]'
     }, {
       test: /\.js$/,
-      loader: 'eslint-loader',
+      loader: 'eslint',
       exclude: /node_modules/
     }, {
       test: /\.jsx$/,
@@ -50,6 +50,9 @@ const webpackConfig = {
       browsers: ['last 5 versions', '> 0%']
     })
   ],
+  eslint: {
+    formatter: require('eslint-friendly-formatter')
+  },
   resolve: {
     // require时省略的扩展名，遇到.vue结尾的也要去加载
     extensions: ['', '.js', '.vue'],
