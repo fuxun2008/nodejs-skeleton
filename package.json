@@ -57,7 +57,7 @@
     "md5": "2.2.1",
     "node-sass": "4.5.3",
     "path": "0.12.7",
-    "postcss-loader": "2.0.6",
+    "postcss-loader": "0.8.2",
     "sass-loader": "6.0.6",
     "style-loader": "0.18.2",
     "stylelint": "8.1.0",

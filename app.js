@@ -9,7 +9,7 @@ const helmet = require('helmet');
 const ejs = require('ejs');
 
 const config = require('./config');
-const redis = require('./services/redis');
+// const redis = require('./services/redis');
 const router = require('./routes');
 const proxy = require('./services/proxy');
 const error = require('./services/error');
@@ -38,7 +38,7 @@ app.use(helmet({
 }));
 
 // init redis
-redis.init(app);
+// redis.init(app);
 
 // init router
 router.init(app);

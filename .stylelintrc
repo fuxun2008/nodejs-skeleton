@@ -1,0 +1,11 @@
+{
+  "extends": "stylelint-config-standard",
+  "ignoreFiles": [
+    "node_modules/**/*.css",
+    "public/assets/*.css",
+    "public/javascripts/libs/*.css"
+  ],
+  "rules": {
+    "selector-pseudo-element-colon-notation": null
+  }
+}
