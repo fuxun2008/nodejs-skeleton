@@ -44,14 +44,12 @@ module.exports = {
     // allow console
     'no-console': 0,
     // allow no tailling comma-dangle
+    'no-underscore-dangle': 0,
     'comma-dangle': 0,
-    'linebreak-style': 0,
-    'prefer-template': 0,
+    'no-bitwise': 0,
+    'no-return-assign': 2,
+    'no-use-before-define': 0,
     'no-plusplus': 0,
-    'max-len': 0,
-    'object-shorthand': 0,
-    'no-restricted-syntax': 0,
-    'guard-for-in': 0,
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0
   }

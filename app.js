@@ -1,46 +1,55 @@
-var express = require('express');
-var path = require('path');
-var favicon = require('serve-favicon');
-var logger = require('morgan');
-var cookieParser = require('cookie-parser');
-var bodyParser = require('body-parser');
+const express = require('express');
+const path = require('path');
+const favicon = require('serve-favicon');
+const logger = require('morgan');
+const compression = require('compression');
+const cookieParser = require('cookie-parser');
+const bodyParser = require('body-parser');
+const helmet = require('helmet');
+const ejs = require('ejs');
 
-var index = require('./routes/index');
-var users = require('./routes/users');
+const config = require('./config');
+const redis = require('./services/redis');
+const router = require('./routes');
+const proxy = require('./services/proxy');
+const error = require('./services/error');
 
-var app = express();
+const app = express();
 
+app.set('env', config.env);
 // view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+app.engine('html', ejs.renderFile);
+app.set('views', path.join(__dirname, config.env === 'development' ? 'views-dev' : 'views-pro'));
+app.set('view engine', 'html');
+app.set('trust proxy', true);
+app.set('x-powered-by', false);
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
-app.use(logger('dev'));
+app.use(express.static(path.join(__dirname, 'public')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+
+app.use(compression());
+app.use(logger('combined'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(helmet({
+  noSniff: false
+}));
 
-app.use('/', index);
-app.use('/users', users);
+// init redis
+redis.init(app);
 
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
-});
+// init router
+router.init(app);
 
-// error handler
-app.use(function(err, req, res, next) {
-  // set locals, only providing error in development
-  res.locals.message = err.message;
-  res.locals.error = req.app.get('env') === 'development' ? err : {};
+// init proxy
+proxy.init(app);
 
-  // render the error page
-  res.status(err.status || 500);
-  res.render('error');
-});
+// init error handlers
+error.init(app);
+
+// locals
+app.locals.__public_path__ = config.publicPath;
 
 module.exports = app;

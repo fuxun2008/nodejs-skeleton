@@ -1,9 +1,11 @@
-var express = require('express');
-var router = express.Router();
+require('isomorphic-fetch');
+require('es6-promise');
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
-});
+const holiday = require('./holiday');
 
-module.exports = router;
+exports.init = app => {
+  app.get('/holiday', holiday.index);
+  app.get('/holiday/index', holiday.index);
+
+  return app;
+};
