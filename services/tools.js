@@ -9,25 +9,21 @@ const log = message => {
 };
 exports.log = log;
 
-exports.createGuid = () => 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
-  const r = Math.random() * 16 | 0;
-  return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
-});
-
-exports.stringify = object => {
-  return querystring.stringify(object);
+exports.createGuid = () => {
+  const S4 = () => (((1 + Math.random()) * 0x10000) | 0).toString(16).substring(1);
+  return (S4() + S4() + '-' + S4() + '-' + S4() + '-' + S4() + '-' + S4() + S4() + S4());
 };
 
-exports.stringifyQs = (query, keys, initial) => {
-  return querystring.stringify(
-    keys.reduce((o, k) => {
-      if (query[k]) {
-        o[k] = query[k];
-      }
-      return o;
-    }, initial || {})
-  );
-};
+exports.stringify = object => querystring.stringify(object);
+
+exports.stringifyQs = (query, keys, initial) => querystring.stringify(
+  keys.reduce((o, k) => {
+    if (query[k]) {
+      o[k] = query[k];
+    }
+    return o;
+  }, initial || {})
+);
 
 exports.stringifyQsAll = (query, initial) => {
   const queryObject = {};
@@ -36,12 +32,16 @@ exports.stringifyQsAll = (query, initial) => {
     initial = {};
   }
 
-  for (let q in query) {
-    queryObject[q] = exports.xssFilter(query[q]);
+  for (const q in query) {
+    if (query[q]) {
+      queryObject[q] = exports.xssFilter(query[q]);
+    }
   }
 
-  for (let i in initial) {
-    queryObject[i] = exports.xssFilter(initial[i]);
+  for (const i in initial) {
+    if (initial[i]) {
+      queryObject[i] = exports.xssFilter(initial[i]);
+    }
   }
 
   return exports.xssFilter(querystring.stringify(queryObject));
@@ -52,8 +52,10 @@ exports.xssFilter = s => {
     return xss.inHTMLData(xss.inSingleQuotedAttr(xss.inDoubleQuotedAttr(s)));
   }
 
-  for (let i in s) {
-    s[i] = exports.xssFilter(s[i]);
+  for (const i in s) {
+    if (s[i]) {
+      s[i] = exports.xssFilter(s[i]);
+    }
   }
 
   return s;
@@ -70,7 +72,7 @@ exports.getMeetYouClientFromUA = ua => {
   if (!ua) {
     return null;
   }
-  const m = ua.match(/MeetYouClient\/([\d.]*)([\s]+)([\(]+)([\d]*)([\)+])/);
+  const m = ua.match(/MeetYouClient\/([\d.]*)([\s]+)([(]+)([\d]*)([)+])/);
   if (m) {
     return m[4];
   }
@@ -89,9 +91,18 @@ exports.failData = (error, req) => {
   log(error.stack);
   const query = req.query;
   const qs = exports.stringifyQs(query, qsArray);
-  const myclient = req.headers['myclient'] || query.myclient;
+  const myclient = req.headers.myclient || query.myclient;
   const host = '';
-  return { status: 'error', data: {}, query, qs, host, message: error.message, appid: req._appid, myclient: myclient };
+  return {
+    status: 'error',
+    data: {},
+    query,
+    qs,
+    host,
+    message: error.message,
+    appid: req._appid,
+    myclient: myclient
+  };
 };
 
 exports.composeHeaders = query => {
@@ -109,11 +120,4 @@ exports.composeHeaders = query => {
   });
 
   return headers;
-};
-
-exports.base64Encode = function(str) {
-  return Buffer.from(str)
-    .toString('base64')
-    .replace(/\+/g, '-')
-    .replace(/\//g, '_');
 };

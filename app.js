@@ -16,7 +16,6 @@ const error = require('./services/error');
 
 const app = express();
 
-console.log('config.env: ', config.env);
 app.set('env', config.env);
 // view engine setup
 app.engine('html', ejs.renderFile);
