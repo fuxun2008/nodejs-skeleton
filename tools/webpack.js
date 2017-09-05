@@ -40,9 +40,6 @@ const webpackConfig = {
         presets: ['react', 'stage-0', 'es2015']
       }
     }, {
-      test: /\.handlebars$/,
-      loader: 'handlebars-loader'
-    }, {
       test: /\.vue$/,
       loader: 'vue'
     }]
