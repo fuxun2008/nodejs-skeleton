@@ -10,11 +10,11 @@
     "serve": "supervisor -i \"public/\" -w \"routes/\", app.js bin/www",
     "watch": "node ./tools/watch",
     "build": "node ./tools/build",
-    "eslint": "eslint -c .eslintrc.js --cache ./public/**/*.js ./routes ./services",
+    "eslint": "eslint -c .eslintrc.json --cache ./public/**/*.js ./routes ./services",
     "stylelint": "stylelint ./public/**/*.css",
     "lint": "npm run eslint && npm run stylelint",
     "prepush": "npm run lint",
-    "upload": "./qshell qupload qupload.conf"
+    "upload": "rm -rf .qshell && ./qshell qupload qupload.conf"
   },
   "dependencies": {
     "body-parser": "1.17.2",

@@ -1,0 +1,43 @@
+stages:
+  - build
+variables:
+  PROJECT_NAME: "nodejs-common"
+  SECRET_KEY: "189EFC3BFE9CCEE59E3D3560052038AF"
+rsync_test:
+  stage: build
+  script:
+    - "rm /data/git/beta/$PROJECT_NAME/ -Rf"
+    - "NOTICE=`/opt/gitlab/embedded/bin/git log -1 | grep -e ^[#\\|[:space:]]`"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || /opt/gitlab/embedded/bin/git archive --format=tar --prefix=$PROJECT_NAME/ HEAD | (cd /data/git/beta/ && tar xf -)"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || rsync  -av --exclude=.gitlab-ci.yml --exclude=log --exclude=logs --delete /data/git/beta/$PROJECT_NAME/  root@211.151.213.12:/srv/www/simulation/$PROJECT_NAME"
+    - "ssh root@211.151.213.12 'cd /srv/www/simulation/nodejs-common; \
+        npm i --production && \
+        NODE_ENV=test PORT=10025 pm2 reload process.json --only nodejs-common-server-test && \
+        NODE_ENV=test PORT=10025 pm2 reload process.json --only nodejs-common-client-test'"
+  only:
+    - release
+rsync_simulation:
+  stage: build
+  script:
+    - "rm /data/git/simulation/$PROJECT_NAME/ -Rf"
+    - "NOTICE=`/opt/gitlab/embedded/bin/git log -1 | grep -e ^[#\\|[:space:]]`"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || /opt/gitlab/embedded/bin/git archive --format=tar --prefix=$PROJECT_NAME/ HEAD | (cd /data/git/simulation/ && tar xf -)"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || rsync -av --exclude=.gitlab-ci.yml --exclude=log --exclude=logs --delete /data/git/simulation/$PROJECT_NAME/ root@211.151.211.214:/srv/www/simulation/$PROJECT_NAME"
+    - "ssh root@211.151.211.214 'cd /srv/www/simulation/nodejs-common; \
+        npm i --production && \
+        NODE_ENV=release PORT=10025 pm2 reload process.json --only nodejs-common-server-release && \
+        NODE_ENV=release PORT=10025 pm2 reload process.json --only nodejs-common-client-release'"
+  only:
+    - simulation
+rsync_deploy:
+  stage: build
+  script:
+    - "mkdir -p /data/git/release/$PROJECT_NAME/"
+    - "AUTHOR=`/opt/gitlab/embedded/bin/git log -1 | grep Author | cut -d \" \" -f 2`"
+    - "NOTICE=`/opt/gitlab/embedded/bin/git log -1 | grep -e ^[#\\|[:space:]]`"
+    - "SIGN=`echo -n 'key='$SECRET_KEY'&project='$PROJECT_NAME'&commit_id='$CI_BUILD_REF'&admin_name='$AUTHOR | md5sum | cut -d ' ' -f 1`"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || /opt/gitlab/embedded/bin/git archive --format=tar --prefix=$CI_BUILD_REF/ HEAD -o /data/git/release/$PROJECT_NAME/$CI_BUILD_REF.tar.gz"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || rsync  -av --delete /data/git/release/ root@211.151.209.94:/data/release/package"
+    - "[[ $NOTICE =~ \".gitlab-ci.yml\" ]] || curl -d \"project=$PROJECT_NAME&commit_id=$CI_BUILD_REF&admin_name=$AUTHOR&notice=$NOTICE&sign=$SIGN\" http://deploy.meiyou.com/index.php?s=/api/setinfo/ps"
+  only:
+    - master
