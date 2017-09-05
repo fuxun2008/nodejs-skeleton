@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const webpack = require('webpack');
-const del = require('del');
+// const del = require('del');
 const md5 = require('md5');
 const csso = require('csso');
 const uglify = require('uglify-js');
@@ -57,11 +57,11 @@ process.on('exit', code => {
   }
 });
 
-log('Removing assets files.');
-del.sync(`${ASSETS}/**`);
+// log('Removing assets files.');
+// del.sync(`${ASSETS}/**`);
 
-log('Creating assets directory.');
-fs.mkdirSync(ASSETS);
+// log('Creating assets directory.');
+// fs.mkdirSync(ASSETS);
 
 log('Runing webpack build.');
 webpackConfig.output.publicPath = cdnPath;

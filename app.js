@@ -16,6 +16,7 @@ const error = require('./services/error');
 
 const app = express();
 
+console.log('config.env: ', config.env);
 app.set('env', config.env);
 // view engine setup
 app.engine('html', ejs.renderFile);
@@ -25,7 +26,7 @@ app.set('trust proxy', true);
 app.set('x-powered-by', false);
 
 // uncomment after placing your favicon in /public
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(path.join(__dirname, 'public'), { dotfiles: 'allow' }));
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 app.use(compression());

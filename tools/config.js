@@ -1,14 +1,13 @@
 const path = require('path');
 
+const cdnPath = '//static.xuyizhen.com/nodejs-skeleton/';
+
 const baseRoot = path.join(__dirname, '..');
-
 let publicPath = '/assets/';
-let env = 'development';
-const ENV = process.env.NODE_ENV;
-
 let toolsApi = 'http://test-tools.seeyouyima.com';
 
-const cdnPath = '//static.xuyizhen.com/nodejs-common/';
+let env = 'development';
+const ENV = process.env.NODE_ENV;
 
 const wechat = {
   appID: 'wxeb14210e81fa9877',
@@ -38,6 +37,6 @@ exports.cdnPath = cdnPath;
 exports.publicPath = publicPath;
 exports.baseRoot = baseRoot;
 exports.toolsApi = toolsApi;
-exports.env = env;
 exports.wechat = wechat;
 exports.codisConf = redisPublic;
+exports.env = env;

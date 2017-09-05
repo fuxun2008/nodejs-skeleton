@@ -17,7 +17,7 @@ compiler.watch({
 
 // start browser-sync
 bs.init({
-  port: '6666',
+  port: '6200',
   proxy: 'http://localhost:6140',
-  files: ['public/assets/*.js', 'public/assets/*.css', 'views-dev/*.html']
+  files: ['public/assets/**/*.js', 'public/assets/**/*.css', 'views-dev/**/*.html']
 });
