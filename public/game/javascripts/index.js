@@ -1,6 +1,8 @@
 require('../../common/stylesheets/error.scss');
 require('../stylesheets/index.scss');
 
-require('/public/common/javascripts/error.js');
+var hello = require('../../common/javascripts/error');
+
+hello();
 
 console.log('game index');

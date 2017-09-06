@@ -101,7 +101,7 @@ webpack(webpackConfig, err => {
 function buildViews() {
   log('Start build views.');
 
-  for (let j = 0; j < VIEWS_FROM.length; j++) {
+  for (let j = VIEWS_FROM.length -  1; j >= 0; j--) {
     const views = fs.readdirSync(VIEWS_FROM[j]);
     for (let i = 0; i < views.length; i++) {
       if (views[i].endsWith('.html')) {
@@ -150,7 +150,7 @@ function processCss(filename) {
   const publicName = `${filename}-${md5(css1)}.css`;
 
   fs.writeFileSync(path.join(ASSETS, publicName), css1);
-  // fs.unlinkSync(path.join(ASSETS, `${filename}.css`));
+  fs.unlinkSync(path.join(ASSETS, `${filename}.css`));
 
   return `${cdnPath}${publicName}`;
 }
@@ -168,7 +168,7 @@ function processScript(filename, imageRE) {
   const publicName = `${filename}-${md5(js2)}.js`;
 
   fs.writeFileSync(path.join(ASSETS, publicName), js2);
-  // fs.unlinkSync(path.join(ASSETS, `${filename}.js`));
+  fs.unlinkSync(path.join(ASSETS, `${filename}.js`));
 
   return `${cdnPath}${publicName}`;
 }

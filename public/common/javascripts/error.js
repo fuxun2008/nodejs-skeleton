@@ -1,3 +1,7 @@
 require('../stylesheets/error.scss');
 
-console.log('error js.');
+function hello() {
+  console.log('error js.');
+}
+
+module.exports = hello;
