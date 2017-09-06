@@ -13,6 +13,7 @@ const joinBaseRoot = file => path.join(baseRoot, file);
 const webpackConfig = {
   entry: {
     holiday_index: joinBaseRoot('public/holiday/javascripts/index.js'),
+    game_index: joinBaseRoot('public/game/javascripts/index.js'),
     error: joinBaseRoot('public/common/javascripts/error.js')
   },
   output: {

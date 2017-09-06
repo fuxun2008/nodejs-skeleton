@@ -7,7 +7,7 @@ const fs = require('fs');
 const path = require('path');
 
 const webpack = require('webpack');
-// const del = require('del');
+const del = require('del');
 const md5 = require('md5');
 const csso = require('csso');
 const uglify = require('uglify-js');
@@ -70,11 +70,11 @@ process.on('exit', code => {
   }
 });
 
-// log('Removing assets files.');
-// del.sync(`${ASSETS}/**`);
+log('Removing assets files.');
+del.sync(`${ASSETS}/**`);
 
-// log('Creating assets directory.');
-// fs.mkdirSync(ASSETS);
+log('Creating assets directory.');
+fs.mkdirSync(ASSETS);
 
 log('Runing webpack build.');
 webpackConfig.output.publicPath = cdnPath;
@@ -139,7 +139,8 @@ function processView(view, vfrom, vdest, vimage) {
   const html3 = html2.replace(DOCTYPE_RE, `${DOCTYPE}<!--\n\n${ART}\n${buildTime}\n\n-->`);
 
   // minify and write to destination file
-  fs.writeFileSync(path.join(vdest, view), minify(html3, htmlOpts));
+  const html4 = minify(html3, htmlOpts);
+  fs.writeFileSync(path.join(vdest, view), html4);
 }
 
 function processCss(filename) {
@@ -149,7 +150,7 @@ function processCss(filename) {
   const publicName = `${filename}-${md5(css1)}.css`;
 
   fs.writeFileSync(path.join(ASSETS, publicName), css1);
-  fs.unlinkSync(path.join(ASSETS, `${filename}.css`));
+  // fs.unlinkSync(path.join(ASSETS, `${filename}.css`));
 
   return `${cdnPath}${publicName}`;
 }
@@ -167,7 +168,7 @@ function processScript(filename, imageRE) {
   const publicName = `${filename}-${md5(js2)}.js`;
 
   fs.writeFileSync(path.join(ASSETS, publicName), js2);
-  fs.unlinkSync(path.join(ASSETS, `${filename}.js`));
+  // fs.unlinkSync(path.join(ASSETS, `${filename}.js`));
 
   return `${cdnPath}${publicName}`;
 }
